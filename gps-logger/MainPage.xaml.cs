@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Devices.Geolocation;
+using Windows.Storage;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -26,6 +27,18 @@ namespace gps_logger
         public MainPage()
         {
             this.InitializeComponent();
+        }
+
+        private async System.Threading.Tasks.Task log_position(double lat, double lon)
+        {
+            StorageFolder externalDevices = Windows.Storage.KnownFolders.RemovableDevices;
+            StorageFolder sdCard = (await externalDevices.GetFoldersAsync()).FirstOrDefault();
+
+            if (sdCard != null)
+            {
+                Windows.Storage.StorageFile sampleFile = await sdCard.CreateFileAsync("gps.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+                await Windows.Storage.FileIO.WriteTextAsync(sampleFile, lat.ToString() + "," + lon.ToString());
+            }
         }
 
         private async System.Threading.Tasks.Task get_position()
@@ -43,6 +56,7 @@ namespace gps_logger
                     // Carry out the operation.
                     Geoposition pos = await geolocator.GetGeopositionAsync();
 
+                    // await log_position(pos.Coordinate.Latitude, pos.Coordinate.Longitude);
                     txtGPS.Text = pos.Coordinate.Latitude.ToString() + ", " + pos.Coordinate.Longitude.ToString();
                     break;
 

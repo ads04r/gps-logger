@@ -7,9 +7,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBox x:Name="txtGPS" HorizontalAlignment="Left" Height="118" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="340"/>
-        <Button Content="Get Position" HorizontalAlignment="Left" Margin="10,133,0,0" VerticalAlignment="Top" Height="73" Width="340" Click="Button_Click"/>
+    <Grid Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="75"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox Background="Black" Foreground="White" x:Name="txtGPS" TextWrapping="Wrap" Text="" Grid.Row="0" Grid.Column="0"/>
+        <Button Foreground="White" HorizontalAlignment="Center" Height="75" Content="Get Position" Click="Button_Click"  Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" Width="300"/>
 
     </Grid>
 </Page>
