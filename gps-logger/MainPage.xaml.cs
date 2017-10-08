@@ -24,8 +24,11 @@ namespace gps_logger
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private String sCurrentFile;
+
         public MainPage()
         {
+            sCurrentFile = "";
             this.InitializeComponent();
         }
 
@@ -44,7 +47,10 @@ namespace gps_logger
         private async System.Threading.Tasks.Task get_position()
         {
             var accessStatus = await Geolocator.RequestAccessAsync();
-//txtGPS.Text = "Waiting...";
+            txtLat.Text = "";
+            txtLon.Text = "";
+            txtTime.Text = "";
+            String sLine = "";
 
             switch (accessStatus)
             {
@@ -60,7 +66,13 @@ namespace gps_logger
                     //txtGPS.Text = pos.Coordinate.Latitude.ToString() + ", " + pos.Coordinate.Longitude.ToString();
                     txtLat.Text = pos.Coordinate.Latitude.ToString();
                     txtLon.Text = pos.Coordinate.Longitude.ToString();
-                    txtTime.Text = DateTime.UtcNow.ToString("h:mm");
+                    txtTime.Text = DateTime.Now.ToString("h:mm");
+                    sLine = DateTime.UtcNow.ToString("YYYY-MM-dd HH:mm:ss") + "\t" + txtLat.Text + "\t" + txtLon.Text + "\t5";
+
+                    StorageFolder fLocal = ApplicationData.Current.LocalCacheFolder;
+                    StorageFile fLogFile = await fLocal.CreateFileAsync(sCurrentFile, CreationCollisionOption.ReplaceExisting);
+                    await FileIO.WriteTextAsync(fLogFile, sLine);
+
                     break;
 
                 case GeolocationAccessStatus.Denied:
@@ -73,9 +85,31 @@ namespace gps_logger
             }
         }
 
+        private async System.Threading.Tasks.Task get_journey_files()
+        {
+            lvFiles.Items.Clear();
+
+            StorageFolder fLocal = ApplicationData.Current.LocalCacheFolder;
+            IReadOnlyList<StorageFile> files = await fLocal.GetFilesAsync();
+            foreach(StorageFile file in files)
+            {
+                lvFiles.Items.Add(file.Name);
+            }
+        }
+
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (sCurrentFile == "")
+            {
+                sCurrentFile = "gps_" + DateTime.UtcNow.ToString("yyyy_MM_dd-HHmmss") + ".txt";
+            }
+            txtStartPosition.Text = "";
             await get_position();
+        }
+
+        private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            await get_journey_files();
         }
     }
 }
