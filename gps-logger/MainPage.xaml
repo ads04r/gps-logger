@@ -6,17 +6,44 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Pivot Title="GPS Logger">
+        <PivotItem Header="Logging">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="0" Margin="10,30,0,0" VerticalAlignment="Top">
+                    <TextBlock Foreground="White" FontSize="25" Text="Lat:"/>
+                    <TextBlock Foreground="White" FontSize="25" Text="Lon:"/>
+                    <TextBlock Foreground="White" FontSize="25" Text=""/>
+                    <TextBlock Foreground="White" FontSize="25" Text="Time:"/>
+                    <TextBlock Foreground="White" FontSize="25" Text="Disance:"/>
+                    <TextBlock Foreground="White" FontSize="25" Text="Start:"/>
+                </StackPanel>
 
-    <Grid Background="Black">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="75"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <TextBox Background="Black" Foreground="White" x:Name="txtGPS" TextWrapping="Wrap" Text="" Grid.Row="0" Grid.Column="0"/>
-        <Button Foreground="White" HorizontalAlignment="Center" Height="75" Content="Get Position" Click="Button_Click"  Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" Width="300"/>
-
-    </Grid>
+                <StackPanel Grid.Column="1" Margin="0,30,0,0" VerticalAlignment="Top">
+                    <TextBlock Foreground="White" FontSize="25" x:Name="txtLat" Text=""/>
+                    <TextBlock Foreground="White" FontSize="25" x:Name="txtLon" Text=""/>
+                    <TextBlock Foreground="White" FontSize="25" Text=""/>
+                    <TextBlock Foreground="White" FontSize="25" x:Name="txtTime" Text=""/>
+                    <TextBlock Foreground="White" FontSize="25" x:Name="txtDistance" Text=""/>
+                    <TextBlock Foreground="White" FontSize="25" x:Name="txtStartPosition" Text=""/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal"
+            HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Foreground="White" HorizontalAlignment="Center" Height="75" Content="Get Position" Click="Button_Click" Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" Width="300"/>
+                </StackPanel>
+            </Grid>
+        </PivotItem>
+        <PivotItem Header="Journeys">
+            <Grid>
+                <ListView HorizontalAlignment="Left" Height="100" Margin="257,177,-21,0" VerticalAlignment="Top" Width="100"/>
+            </Grid>
+        </PivotItem>
+    </Pivot>
 </Page>

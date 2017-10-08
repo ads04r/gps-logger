@@ -44,7 +44,7 @@ namespace gps_logger
         private async System.Threading.Tasks.Task get_position()
         {
             var accessStatus = await Geolocator.RequestAccessAsync();
-            txtGPS.Text = "Waiting...";
+//txtGPS.Text = "Waiting...";
 
             switch (accessStatus)
             {
@@ -57,15 +57,18 @@ namespace gps_logger
                     Geoposition pos = await geolocator.GetGeopositionAsync();
 
                     // await log_position(pos.Coordinate.Latitude, pos.Coordinate.Longitude);
-                    txtGPS.Text = pos.Coordinate.Latitude.ToString() + ", " + pos.Coordinate.Longitude.ToString();
+                    //txtGPS.Text = pos.Coordinate.Latitude.ToString() + ", " + pos.Coordinate.Longitude.ToString();
+                    txtLat.Text = pos.Coordinate.Latitude.ToString();
+                    txtLon.Text = pos.Coordinate.Longitude.ToString();
+                    txtTime.Text = DateTime.UtcNow.ToString("h:mm");
                     break;
 
                 case GeolocationAccessStatus.Denied:
-                    txtGPS.Text = "Access denied";
+                    //txtGPS.Text = "Access denied";
                     break;
 
                 case GeolocationAccessStatus.Unspecified:
-                    txtGPS.Text = "Cannot get a fix";
+                    //txtGPS.Text = "Cannot get a fix";
                     break;
             }
         }

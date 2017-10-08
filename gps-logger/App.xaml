@@ -3,6 +3,24 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:gps_logger"
-    RequestedTheme="Light">
+    RequestedTheme="Dark">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default" >
+                    <SolidColorBrush x:Key="PivotHeaderBackgroundSelectedBrush" Color="Magenta" />
+                    <SolidColorBrush x:Key="PivotHeaderForegroundSelectedBrush" Color="Yellow" />
+                    <SolidColorBrush x:Key="PivotHeaderForegroundUnselectedBrush" Color="Cyan" />
+
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="HighContrast" >
+                    <SolidColorBrush x:Key="PivotHeaderBackgroundSelectedBrush" Color="{ThemeResource PhoneControlBackgroundColor}" />
+                    <SolidColorBrush x:Key="PivotHeaderForegroundSelectedBrush" Color="{ThemeResource PhoneControlForegroundColor}" />
+                    <SolidColorBrush x:Key="PivotHeaderForegroundUnselectedBrush" Color="{ThemeResource PhoneControlDisabledColor}" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 
 </Application>
