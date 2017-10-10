@@ -10,12 +10,12 @@ namespace gps_logger
     {
         public Windows.Storage.StorageFile file { get; set; }
         public string label { get; set; }
-        public DateTime dt { get; set; }
+        public string ds { get; set; }
         public LogFile()
         {
             this.file = null;
             this.label = "Unknown place";
-            this.dt = DateTime.UtcNow;
+            this.ds = "";
         }
     }
 
@@ -36,7 +36,7 @@ namespace gps_logger
             IReadOnlyList<Windows.Storage.StorageFile> files = await fLocal.GetFilesAsync();
             foreach (Windows.Storage.StorageFile lfile in files)
             {
-                this.logfiles.Add(new LogFile() { file = lfile, label=this.get_location(lfile) });
+                this.logfiles.Add(new LogFile() { file = lfile, label=this.get_location(lfile), ds=lfile.DateCreated.ToString("ddd, d MMM yyyy, HH:mm") });
             }
         }
 
