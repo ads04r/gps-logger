@@ -25,11 +25,13 @@ namespace gps_logger
     public sealed partial class MainPage : Page
     {
         private String sCurrentFile;
+        public LogFileViewModel ViewModel { get; set; }
 
         public MainPage()
         {
-            sCurrentFile = "";
             this.InitializeComponent();
+            sCurrentFile = "";
+            this.ViewModel = new LogFileViewModel();
         }
 
         private async System.Threading.Tasks.Task log_position(double lat, double lon)
@@ -85,23 +87,11 @@ namespace gps_logger
             }
         }
 
-        private async System.Threading.Tasks.Task get_journey_files()
-        {
-            lvFiles.Items.Clear();
-
-            StorageFolder fLocal = ApplicationData.Current.LocalCacheFolder;
-            IReadOnlyList<StorageFile> files = await fLocal.GetFilesAsync();
-            foreach(StorageFile file in files)
-            {
-                lvFiles.Items.Add(file.Name);
-            }
-        }
-
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             if (sCurrentFile == "")
             {
-                sCurrentFile = "gps_" + DateTime.UtcNow.ToString("yyyy_MM_dd-HHmmss") + ".txt";
+                sCurrentFile = "gps_" + DateTime.UtcNow.ToString("yyyy_MM_dd") + ".txt";
             }
             txtStartPosition.Text = "";
             await get_position();
@@ -109,7 +99,7 @@ namespace gps_logger
 
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            await get_journey_files();
+            await ViewModel.Refresh();
         }
     }
 }
