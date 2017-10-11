@@ -26,6 +26,7 @@ namespace gps_logger
     {
         private String sCurrentFile;
         public LogFileViewModel ViewModel { get; set; }
+        private LogFile selected;
 
         public MainPage()
         {
@@ -69,11 +70,11 @@ namespace gps_logger
                     txtLat.Text = pos.Coordinate.Latitude.ToString();
                     txtLon.Text = pos.Coordinate.Longitude.ToString();
                     txtTime.Text = DateTime.Now.ToString("h:mm");
-                    sLine = DateTime.UtcNow.ToString("YYYY-MM-dd HH:mm:ss") + "\t" + txtLat.Text + "\t" + txtLon.Text + "\t5";
+                    sLine = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t" + txtLat.Text + "\t" + txtLon.Text + "\t5\n";
 
                     StorageFolder fLocal = ApplicationData.Current.LocalCacheFolder;
-                    StorageFile fLogFile = await fLocal.CreateFileAsync(sCurrentFile, CreationCollisionOption.ReplaceExisting);
-                    await FileIO.WriteTextAsync(fLogFile, sLine);
+                    StorageFile fLogFile = await fLocal.CreateFileAsync(sCurrentFile, CreationCollisionOption.OpenIfExists);
+                    await FileIO.AppendTextAsync(fLogFile, sLine);
 
                     break;
 
@@ -100,6 +101,32 @@ namespace gps_logger
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             await ViewModel.Refresh();
+        }
+
+        private void Remove_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private async void Save_Click(object sender, RoutedEventArgs e)
+        {
+            var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+            savePicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+            savePicker.FileTypeChoices.Add("Plain Text", new List<String>() { ".txt" });
+            savePicker.SuggestedFileName = selected.file.Name;
+            Windows.Storage.StorageFile file = await savePicker.PickSaveFileAsync();
+            if(file != null)
+            {
+                await selected.file.CopyAndReplaceAsync(file);
+            }
+        }
+
+        private void lvFiles_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            ListView lv = (ListView)sender;
+            TextBlock tb = (TextBlock)e.OriginalSource;
+            selected = (LogFile)tb.DataContext;
+            lvFileMenu.ShowAt(lv, e.GetPosition(lv));
         }
     }
 }

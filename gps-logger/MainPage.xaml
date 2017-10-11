@@ -42,7 +42,15 @@
         </PivotItem>
         <PivotItem Header="Journeys" x:Name="tabJourneys">
             <Grid>
-                <ListView HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="lvFiles" ItemsSource="{x:Bind ViewModel.LogFiles}">
+                <ListView HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="lvFiles" ItemsSource="{x:Bind ViewModel.LogFiles}" RightTapped="lvFiles_RightTapped">
+                    <ListView.Resources>
+                        <MenuFlyout x:Name="lvFileMenu">
+                            <MenuFlyout.Items>
+                                <MenuFlyoutItem x:Name="liSave" Text="Save" Click="Save_Click"/>
+                                <MenuFlyoutItem x:Name="liRemove" Text="Remove" Click="Remove_Click"/>
+                            </MenuFlyout.Items>
+                        </MenuFlyout>
+                    </ListView.Resources>
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="local:LogFile">
                             <Grid>
@@ -53,7 +61,7 @@
                                 <Image Source="Assets/Square44x44Logo.scale-200.png" Margin="0,10,0,10" Width="44" Height="44" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 <StackPanel VerticalAlignment="Center" Grid.Column="1">
                                     <TextBlock Text="{x:Bind label}" Foreground="White" FontSize="23"/>
-                                    <TextBlock Text="{x:Bind dt}" Foreground="LightGray" FontSize="10"/>
+                                    <TextBlock Text="{x:Bind ds}" Foreground="LightGray" FontSize="10"/>
                                 </StackPanel>
                                 
                             </Grid>
