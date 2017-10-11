@@ -96,16 +96,40 @@ namespace gps_logger
             }
             txtStartPosition.Text = "";
             await get_position();
+            await ViewModel.Refresh();
         }
 
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            await ViewModel.Refresh();
+            Pivot p = (Pivot)sender;
+            PivotItem pi = (PivotItem)p.SelectedItem;
+            string header = (string)pi.Header;
+
+            if (header != "Journeys")
+            {
+                await ViewModel.Refresh();
+            }
         }
 
-        private void Remove_Click(object sender, RoutedEventArgs e)
+        private async void Remove_Click(object sender, RoutedEventArgs e)
         {
-
+            Windows.UI.Popups.MessageDialog showDialog = new Windows.UI.Popups.MessageDialog("Are you sure you want to delete " + selected.file.Name + "?");
+            showDialog.Commands.Add(new Windows.UI.Popups.UICommand("Yes")
+            {
+                Id = 0
+            });
+            showDialog.Commands.Add(new Windows.UI.Popups.UICommand("No")
+            {
+                Id = 1
+            });
+            showDialog.DefaultCommandIndex = 0;
+            showDialog.CancelCommandIndex = 1;
+            var result = await showDialog.ShowAsync();
+            if ((int)result.Id == 0)
+            {
+                await selected.file.DeleteAsync();
+                await ViewModel.Refresh();
+            }
         }
 
         private async void Save_Click(object sender, RoutedEventArgs e)

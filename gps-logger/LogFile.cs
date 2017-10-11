@@ -34,6 +34,7 @@ namespace gps_logger
         {
             Windows.Storage.StorageFolder fLocal = Windows.Storage.ApplicationData.Current.LocalCacheFolder;
             IReadOnlyList<Windows.Storage.StorageFile> files = await fLocal.GetFilesAsync();
+            this.logfiles.Clear();
             foreach (Windows.Storage.StorageFile lfile in files)
             {
                 this.logfiles.Add(new LogFile() { file = lfile, label=this.get_location(lfile), ds=lfile.DateCreated.ToString("ddd, d MMM yyyy, HH:mm") });
