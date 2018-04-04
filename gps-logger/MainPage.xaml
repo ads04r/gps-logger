@@ -48,6 +48,9 @@
                             <MenuFlyout.Items>
                                 <MenuFlyoutItem x:Name="liSave" Text="Save" Click="Save_Click"/>
                                 <MenuFlyoutItem x:Name="liRemove" Text="Remove" Click="Remove_Click"/>
+                                <MenuFlyoutSeparator/>
+                                <MenuFlyoutItem x:Name="liSaveAll" Text="Save All" Click="SaveAll_Click"/>
+                                <MenuFlyoutItem x:Name="liRemoveAll" Text="Remove All" Click="RemoveAll_Click"/>
                             </MenuFlyout.Items>
                         </MenuFlyout>
                     </ListView.Resources>

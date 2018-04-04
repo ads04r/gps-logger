@@ -145,6 +145,51 @@ namespace gps_logger
             }
         }
 
+        private async void SaveAll_Click(object sender, RoutedEventArgs e)
+        {
+            var savePicker = new Windows.Storage.Pickers.FolderPicker();
+            savePicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+            Windows.Storage.StorageFolder path = await savePicker.PickSingleFolderAsync();
+            if (path != null)
+            {
+                for(int i = 0; i < lvFiles.Items.Count; i++)
+                {
+                    LogFile lf = (LogFile)lvFiles.Items[i];
+                    Windows.Storage.StorageFile newfile = await path.CreateFileAsync(lf.file.Name, CreationCollisionOption.ReplaceExisting);
+                    if (newfile != null)
+                    {
+                        await lf.file.CopyAndReplaceAsync(newfile);
+                    }
+                }
+            }
+        }
+
+        private async void RemoveAll_Click(object sender, RoutedEventArgs e)
+        {
+            Windows.UI.Popups.MessageDialog showDialog = new Windows.UI.Popups.MessageDialog("Are you sure you want to delete ALL your GPS logs?");
+            showDialog.Commands.Add(new Windows.UI.Popups.UICommand("Yes")
+            {
+                Id = 0
+            });
+            showDialog.Commands.Add(new Windows.UI.Popups.UICommand("No")
+            {
+                Id = 1
+            });
+            showDialog.DefaultCommandIndex = 0;
+            showDialog.CancelCommandIndex = 1;
+            var result = await showDialog.ShowAsync();
+            if ((int)result.Id == 0)
+            {
+                for (int i = 0; i < lvFiles.Items.Count; i++)
+                {
+                    LogFile lf = (LogFile)lvFiles.Items[i];
+                    await lf.file.DeleteAsync();
+                }
+
+                await ViewModel.Refresh();
+            }
+        }
+
         private void lvFiles_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             ListView lv = (ListView)sender;
